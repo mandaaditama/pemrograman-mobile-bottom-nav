@@ -17,10 +17,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Bottom Nav Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color.fromARGB(255, 253, 130, 191),
+          seedColor: const Color.fromARGB(255, 237, 133, 168),
         ),
       ),
       home: const MainNavigation(),
@@ -39,33 +39,31 @@ class _MainNavigationState extends State<MainNavigation> {
   int _currentIndex = 0;
   bool _showFab = true;
 
-  final List<Widget> _pages = [
+  final List<Widget> _screens = [
     const HomePage(),
     const MessagePage(),
     const ProfilePage(),
     const SettingPage(),
   ];
 
-  final iconList = <IconData>[
-    Icons.home,
-    Icons.message,
-    Icons.person,
-    Icons.settings,
-  ];
+  final iconList = [Icons.home, Icons.message, Icons.person, Icons.settings];
 
-  final titles = ['Home', 'Message', 'Profile', 'Settings'];
+  final pageTitles = [
+    'AMANDA ADITAMA',
+    'AMANDA ADITAMA',
+    'AMANDA ADITAMA',
+    'AMANDA ADITAMA',
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(titles[_currentIndex]),
+        title: Text(pageTitles[_currentIndex]),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        automaticallyImplyLeading: false,
+        centerTitle: true,
       ),
-      body: _pages[_currentIndex],
-
-      // FAB that can be hidden
+      body: _screens[_currentIndex],
       floatingActionButton: AnimatedSwitcher(
         duration: const Duration(milliseconds: 300),
         child:
@@ -84,21 +82,19 @@ class _MainNavigationState extends State<MainNavigation> {
                 : const SizedBox.shrink(key: ValueKey('no_fab')),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-
-      // Bottom navigation bar with dynamic notch
       bottomNavigationBar: Stack(
         alignment: Alignment.bottomCenter,
         children: [
           AnimatedBottomNavigationBar.builder(
             itemCount: iconList.length,
-            tabBuilder: (int index, bool isActive) {
+            tabBuilder: (index, isActive) {
               final color =
                   isActive
-                      ? Theme.of(context).colorScheme.primary
-                      : Colors.grey;
+                      ? Colors.white
+                      : const Color.fromARGB(255, 65, 64, 64);
               return Icon(iconList[index], color: color);
             },
-            backgroundColor: Theme.of(context).colorScheme.surface,
+            backgroundColor: const Color.fromARGB(255, 237, 133, 168),
             activeIndex: _currentIndex,
             gapLocation: _showFab ? GapLocation.center : GapLocation.none,
             notchSmoothness: NotchSmoothness.softEdge,
@@ -107,10 +103,8 @@ class _MainNavigationState extends State<MainNavigation> {
                 _currentIndex = index;
               });
             },
-            key: ValueKey(_showFab), // Forces re-render on FAB toggle
+            key: ValueKey(_showFab),
           ),
-
-          // Invisible tap area to bring FAB back
           if (!_showFab)
             Positioned(
               bottom: 10,
